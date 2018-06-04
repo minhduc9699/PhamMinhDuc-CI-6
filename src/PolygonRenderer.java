@@ -2,19 +2,19 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class PolygonRenderer {
+public class PolygonRenderer implements Renderer{
     private List<Vector2D> verties;
     private Polygon polygon;
     public double angle =0.0;
     private Color color;
 
-    public PolygonRenderer(Color color, Vector2D... verties){ //Vector2D[] luon o cuoi cung
+    public PolygonRenderer(Color color, Vector2D... verties){
         this.verties = Arrays.asList(verties);
         this.color = color;
         this.polygon = new Polygon();
 
     }
-
+    @Override
     public void render(Graphics graphics, Vector2D position){
         graphics.setColor(this.color);
         this.updatePolygon(position);

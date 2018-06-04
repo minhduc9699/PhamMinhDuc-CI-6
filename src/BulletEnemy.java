@@ -3,7 +3,7 @@ import java.awt.*;
 public class BulletEnemy {
     public Vector2D position;
     public Vector2D velocity;
-    private ImageRenderer renderer;
+    private Renderer renderer;
 
     public BulletEnemy(){
         this.position = new Vector2D();

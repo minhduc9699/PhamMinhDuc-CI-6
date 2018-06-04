@@ -2,7 +2,7 @@ import java.awt.*;
 
 public class Background {
     public Vector2D position;
-    private BackgroundRenderer renderer;
+    private Renderer renderer;
 
     public Background() {
         this.position = new Vector2D();

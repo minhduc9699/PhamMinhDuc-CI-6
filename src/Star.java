@@ -2,7 +2,7 @@ import java.awt.*;
 
 public class Star {
     public Vector2D position;
-    private ImageRenderer renderer;
+    private Renderer renderer;
     public Vector2D velocity;
 
 

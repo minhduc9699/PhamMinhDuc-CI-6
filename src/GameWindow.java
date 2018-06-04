@@ -11,10 +11,10 @@ public class GameWindow extends JFrame {
     long lastTime =0;
 
     public GameWindow () {
-        this.setSize(1024, 600); // set size window
+        this.setSize(1024, 600);
         this.setupGameCanvas();
         this.event();
-        this.setVisible(true);// cho phep cua so window hien thi
+        this.setVisible(true);
     }
 
 
@@ -30,31 +30,36 @@ public class GameWindow extends JFrame {
 
     private void keyboardEvent(){
         this.addKeyListener(new KeyListener() {
+            private Vector2D NORMAL = new Vector2D(3.5f, 0);
+            private Vector2D HIGH = new Vector2D(10, 0);
             @Override
             public void keyTyped(KeyEvent e) {
             }
             @Override
             public void keyPressed(KeyEvent e) {
+                Vector2D velocity = NORMAL.copy();
                 if(e.getKeyCode()== KeyEvent.VK_LEFT){
                     gameCanvas.player.angle -= 10;
-
                 }
                 if(e.getKeyCode()==KeyEvent.VK_RIGHT){
                     gameCanvas.player.angle += 10;
                 }
-                Vector2D rotate = (new Vector2D(4,0)).rotate(gameCanvas.player.angle);
-                gameCanvas.player.velocity.set(rotate);
+
 
                 if(e.getKeyCode()==KeyEvent.VK_UP){
-                    gameCanvas.player.velocity.multiply(2);
-
+                    velocity = HIGH.copy();
                 }
+                Vector2D rotate = velocity.rotate(gameCanvas.player.angle);
+                gameCanvas.player.velocity.set(rotate);
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
+                Vector2D velocity = NORMAL.copy();
+
                 if(e.getKeyCode()==KeyEvent.VK_UP){
-                    Vector2D rotate = (new Vector2D(4,0)).rotate(gameCanvas.player.angle);
+                    velocity = NORMAL.copy();
+                    Vector2D rotate = velocity.rotate(gameCanvas.player.angle);
                     gameCanvas.player.velocity.set(rotate);
 
                 }

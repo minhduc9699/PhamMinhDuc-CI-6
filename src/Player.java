@@ -1,10 +1,5 @@
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class Player {
 
@@ -12,7 +7,7 @@ public class Player {
     public Vector2D velocity;
     private Random random;
     public double angle = 0.0;
-    private PolygonRenderer renderer;
+    private Renderer renderer;
     private PlayerShoot playerShoot;
 
 
@@ -31,7 +26,7 @@ public class Player {
 
     public void run() {
         this.position.addUp(this.velocity);
-        this.renderer.angle = this.angle;
+        ((PolygonRenderer) this.renderer).angle = this.angle;
         this.backToScreen();
         this.playerShoot.run(this);
         this.playerShoot.bulletsPlayer.forEach(bulletPlayer -> bulletPlayer.run());

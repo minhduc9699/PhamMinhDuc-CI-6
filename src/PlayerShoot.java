@@ -11,10 +11,10 @@ public class PlayerShoot {
     }
 
     public void run(Player player){
-        if(countBullet ==4){
+        if(countBullet ==20){
         BulletPlayer bulletPlayer = new BulletPlayer();
         bulletPlayer.position.set(player.position);
-        bulletPlayer.velocity.set(player.velocity.add(player.velocity.normalize().multiply(6)));
+        bulletPlayer.velocity.set(player.velocity.add(player.velocity.normalize().multiply(10)));
 
         this.bulletsPlayer.add(bulletPlayer);
         countBullet =0;

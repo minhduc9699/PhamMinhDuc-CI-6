@@ -3,7 +3,7 @@ import java.awt.*;
 public class BulletPlayer {
     public Vector2D position;
     public Vector2D velocity;
-    private ImageRenderer renderer;
+    private Renderer renderer;
 
     public BulletPlayer(){
         this.position = new Vector2D();
