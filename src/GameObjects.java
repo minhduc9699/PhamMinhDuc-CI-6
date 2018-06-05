@@ -4,14 +4,17 @@ public class GameObjects {
     public Vector2D position;
     public Renderer renderer;
 
-    public GameObjects () {
+    public GameObjects() {
         this.position = new Vector2D();
-    };
-
-    public void run() {
     }
 
-    public void render(Graphics graphics) {
-        this.renderer.render(graphics, this.position);
+    public void run(){
+    }
+
+    public void render(Graphics graphics){
+        if(this.renderer== null){
+            return;
+        }
+        this.renderer.render(graphics,this.position);
     }
 }

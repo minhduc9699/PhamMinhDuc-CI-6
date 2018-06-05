@@ -8,13 +8,12 @@ public class PolygonRenderer implements Renderer{
     public double angle =0.0;
     private Color color;
 
-    public PolygonRenderer(Color color, Vector2D... verties){
+    public PolygonRenderer(Color color, Vector2D... verties){ //Vector2D[] luon o cuoi cung
         this.verties = Arrays.asList(verties);
         this.color = color;
         this.polygon = new Polygon();
-
     }
-    @Override
+
     public void render(Graphics graphics, Vector2D position){
         graphics.setColor(this.color);
         this.updatePolygon(position);
@@ -34,5 +33,4 @@ public class PolygonRenderer implements Renderer{
                 .forEach(vertex -> polygon.addPoint((int)vertex.x, (int)vertex.y));
 
     }
-
 }

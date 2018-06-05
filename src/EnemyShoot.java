@@ -1,11 +1,12 @@
+import java.beans.FeatureDescriptor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class EnemyShoot {
     public List<BulletEnemy> bulletEnemies;
-    private int countBullet = 0;
-    private double angleBullet =0;
+
+    private FrameCounter frameCounter = new FrameCounter(200);
 
     public EnemyShoot(){
         this.bulletEnemies = new ArrayList<>();
@@ -13,21 +14,14 @@ public class EnemyShoot {
 
     public void run(EnemyAttack enemy){
 
-        if(countBullet ==100){
-            for(int i=0; i<12 ; i++){
+        if(this.frameCounter.run()){
+            for(int angle=0; angle<360; angle+=30){
                 BulletEnemy bulletEnemy = new BulletEnemy();
-                this.angleBullet +=30;
-                bulletEnemy.velocity= new Vector2D(5,0).rotate(this.angleBullet);
+                bulletEnemy.velocity= new Vector2D(5,0).rotate(angle);
                 bulletEnemy.position.set(enemy.position);
                 this.bulletEnemies.add(bulletEnemy);
             }
-
-            countBullet =0;
-            this.angleBullet =0;
-
-        }
-        else{
-            countBullet +=1;
+            this.frameCounter.reset();
         }
 
         Iterator<BulletEnemy> it = bulletEnemies.iterator();
@@ -37,8 +31,6 @@ public class EnemyShoot {
                 it.remove();
             }
         }
-
-
 
     }
 

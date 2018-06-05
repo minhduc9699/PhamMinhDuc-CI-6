@@ -15,7 +15,7 @@ public class ImageRenderer implements Renderer{
         this.height = height;
         this.image = this.loadImage(path);
     }
-    @Override
+
     public void render (Graphics graphics, Vector2D position){
         graphics.drawImage(this.image, (int)position.x, (int)position.y,this.width,this.height,null);
     }

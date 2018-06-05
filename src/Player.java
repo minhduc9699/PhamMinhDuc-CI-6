@@ -1,59 +1,41 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
-public class Player {
+public class Player extends GameObjects{
 
-    public Vector2D position;
-    public Vector2D velocity;
-    private Random random;
-    public double angle = 0.0;
-    private Renderer renderer;
+    public PlayerMove playerMove;
     private PlayerShoot playerShoot;
 
-
     public Player() {
-        this.position = new Vector2D();
-        this.velocity = new Vector2D();
-        this.random = new Random();
+
         this.renderer = new PolygonRenderer(
                 Color.RED,
                 new Vector2D(),
                 new Vector2D(0, 16),
                 new Vector2D(20, 8)
         );
+        this.playerMove = new PlayerMove();
         this.playerShoot = new PlayerShoot();
     }
 
+    @Override
     public void run() {
-        this.position.addUp(this.velocity);
-        ((PolygonRenderer) this.renderer).angle = this.angle;
-        this.backToScreen();
+        super.run();
+        this.playerMove.run(this);
         this.playerShoot.run(this);
         this.playerShoot.bulletsPlayer.forEach(bulletPlayer -> bulletPlayer.run());
+        ((PolygonRenderer)(this.renderer)).angle = this.playerMove.angle;
     }
 
-    private void backToScreen() {
-        if (this.position.x > 1024) {
-            this.position.set(0, this.random.nextInt(600));
-        }
-        if (this.position.x < 0) {
-            this.position.set(1024, this.random.nextInt(600));
-        }
-        if (this.position.y > 600) {
-            this.position.set(this.random.nextInt(1024), 0);
-        }
-        if (this.position.y < 0) {
-            this.position.set(this.random.nextInt(1024), 600);
-        }
-    }
-
-
+    @Override
     public void render(Graphics graphics) {
-        this.renderer.render(graphics,position);
+        super.render(graphics);
         this.playerShoot.bulletsPlayer.forEach(bulletPlayer -> bulletPlayer.render(graphics));
     }
-
-
 }
-
 
