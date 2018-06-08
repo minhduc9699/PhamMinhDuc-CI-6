@@ -1,25 +1,30 @@
-import java.util.ArrayList;
-import java.util.List;
+package game.enemy;
+
+import base.FrameCounter;
+import base.GameObject;
+import base.GameObjectManager;
+
 import java.util.Random;
 
-public class EnemySpawner extends GameObjects{
-    List<Enemy> enemies;
-    FrameCounter frameCounter = new FrameCounter(100);
+public class EnemySpawner extends GameObject {
+
+    FrameCounter frameCounter ;
     Random random;
 
+
     public EnemySpawner(){
-        this.enemies = new ArrayList<>();
+
         this.random = new Random();
+        this.frameCounter = new FrameCounter(300);
     }
     @Override
-    public void run(){
+    public  void run(){
         if(this.frameCounter.run()){
             super.run();
             Enemy enemy = new Enemy();
             enemy.position.set(this.random.nextInt(1024),this.random.nextInt(600));
-            this.enemies.add(enemy);
+            GameObjectManager.instance.add(enemy);
             this.frameCounter.reset();
         }
-        this.enemies.forEach(enemy -> enemy.run());
     }
 }

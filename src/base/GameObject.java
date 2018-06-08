@@ -1,14 +1,21 @@
+package base;
+
+import base.Vector2D;
+import renderer.Renderer;
+
 import java.awt.*;
 
-public class GameObjects {
+public class GameObject {
     public Vector2D position;
     public Renderer renderer;
+    public boolean isAlive = true;
 
-    public GameObjects() {
+    public GameObject() {
         this.position = new Vector2D();
     }
 
     public void run(){
+
     }
 
     public void render(Graphics graphics){

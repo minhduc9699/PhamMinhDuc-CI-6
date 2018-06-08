@@ -1,11 +1,16 @@
-import java.awt.*;
-import java.awt.image.BufferedImage;
+package game.star;
 
-public class Star extends GameObjects{
+import base.GameObject;
+import base.Vector2D;
+import renderer.ImageRenderer;
+
+public class Star extends GameObject {
 
     public Vector2D velocity;
 
+
     public Star() {
+
         this.velocity = new Vector2D();
         this.renderer = new ImageRenderer("resources/images/star.png",5,5);
     }
@@ -16,8 +21,5 @@ public class Star extends GameObjects{
         this.position.addUp(this.velocity);
     }
 
-    @Override
-    public void render(Graphics graphics){
-        super.render(graphics);
-    }
+
 }
