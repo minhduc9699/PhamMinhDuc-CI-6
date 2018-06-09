@@ -16,18 +16,16 @@ public class SpecialEnemy extends Enemy {
     private game.enemy.EnemyShoot enemyShoot;
 
 
-    //constructor
     public SpecialEnemy(){
         this.random = new Random();
         this.velocity = new Vector2D(1,0);
-        this.renderer = new ImageRenderer("resources-rocket/resources/images/circle.png",20,20);
+        this.renderer = new ImageRenderer("resources/images/circle.png",20,20);
         this.boxCollider = new BoxCollider(20,20);
         this.enemyShoot = new game.enemy.EnemyShoot();
     }
 
     @Override
     public void run(){
-//        super.run();
         this.position.addUp(this.velocity);
         this.enemyShoot.run(this);
         this.boxCollider.position.set(this.position.x-10,this.position.y-10);
