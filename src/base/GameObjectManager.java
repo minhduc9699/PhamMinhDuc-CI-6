@@ -1,151 +1,94 @@
 package base;
 
-import game.bullet.BulletEnemy;
-import game.bullet.BulletPlayer;
-import game.enemy.Enemy;
-import game.enemy.SpecialEnemy;
 import game.player.Player;
 import physic.BoxCollider;
+import physic.PhysicBody;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class GameObjectManager {
-
 
     public static GameObjectManager instance = new GameObjectManager();
 
     private List<GameObject> list;
-    private List<GameObject> templist;
+    private List<GameObject> tempList;
 
-    private GameObjectManager(){
+    private GameObjectManager() {
         this.list = new ArrayList<>();
-        this.templist = new ArrayList<>();
+        this.tempList = new ArrayList<>();
     }
 
-    public void add(GameObject gameObject){
-        this.templist.add(gameObject);
+    public void add(GameObject gameObject) {
+        this.tempList.add(gameObject);
     }
 
-
-    public void runAll(){
-        this.list.stream()
+    public void runAll() {
+        this.list
+                .stream()
                 .filter(gameObject -> gameObject.isAlive)
                 .forEach(gameObject -> gameObject.run());
-
-        this.list.addAll(this.templist);
-        this.templist.clear();
+        this.list.addAll(this.tempList);
+        this.tempList.clear();
     }
 
-    public void renderAll(Graphics graphics){
-
-        this.list.stream()
+    public void renderAll(Graphics graphics) {
+        this.list
+                .stream()
                 .filter(gameObject -> gameObject.isAlive)
                 .forEach(gameObject -> gameObject.render(graphics));
-
     }
 
-    public Player findPlayer(){
-        return (Player)this.list
+    public Player findPlayer() {
+        return (Player) this.list
                 .stream()
                 .filter(gameObject -> gameObject instanceof Player)
-                .findFirst().orElse(null);
+                .findFirst()
+                .orElse(null);
     }
 
 
-    public Stream<GameObject> findObjectAlive(Class className){
-        return this.list.stream()
+    public <T extends GameObject> T checkCollision(BoxCollider boxCollider, Class<T> cls){
+        return (T) this.list.stream()
                 .filter(gameObject -> gameObject.isAlive)
-                .filter(gameObject -> gameObject.getClass()== className);
+                .filter(gameObject -> cls.isInstance(gameObject))
+                .filter(gameObject -> gameObject instanceof PhysicBody)
+                .filter(gameObject -> {
+                    BoxCollider other = ((PhysicBody)gameObject).getBoxCollider();
+                    return boxCollider.checkBoxCollider(other);
+                })
+                .findFirst()
+                .orElse(null);
 
     }
 
-    public GameObject checkCollision(GameObject gameObjectCollied){
-
-
-
-        if (gameObjectCollied instanceof BulletPlayer) {
-
-            Enemy enemy = (Enemy)this.findObjectAlive(Enemy.class)
-                    .filter(gameObject -> {
-                        BoxCollider other = ((Enemy) gameObject).boxCollider;
-                        return ((BulletPlayer)gameObjectCollied).boxCollider.checkBoxCollider(other);
-                    })
-                    .findFirst()
-                    .orElse(null);
-
-            SpecialEnemy specialEnemy = (SpecialEnemy)this.findObjectAlive(SpecialEnemy.class)
-                    .filter(gameObject -> {
-                        BoxCollider other = ((SpecialEnemy) gameObject).boxCollider;
-                        return ((BulletPlayer)gameObjectCollied).boxCollider.checkBoxCollider(other);
-                    })
-                    .findFirst()
-                    .orElse(null);
-
-            BulletEnemy bulletEnemy = (BulletEnemy)this.findObjectAlive(BulletEnemy.class)
-                    .filter(gameObject -> {
-                        BoxCollider other = ((BulletEnemy) gameObject).boxCollider;
-                        return ((BulletPlayer)gameObjectCollied).boxCollider.checkBoxCollider(other);
-                    })
-                    .findFirst()
-                    .orElse(null);
-
-            if(enemy!= null){
-                return enemy;
-            }
-            if(bulletEnemy!= null){
-                return bulletEnemy;
-            }
-            if(specialEnemy!= null){
-                return specialEnemy;
-            }
-            else return null;
+    public <T extends GameObject> T recycle(Class<T> cls){
+        T object = (T)this.list
+                .stream()
+                .filter(gameObject -> !gameObject.isAlive)
+                .filter(gameObject -> cls.isInstance(gameObject))
+                .findFirst()
+                .orElse(null);
+        if (object!= null){
+            object.isAlive = true;
         }
-
-        else if (gameObjectCollied instanceof Player) {
-
-            Enemy enemy = (Enemy)this.findObjectAlive(Enemy.class)
-                    .filter(gameObject -> {
-                        BoxCollider other = ((Enemy) gameObject).boxCollider;
-                        return ((Player)gameObjectCollied).boxCollider.checkBoxCollider(other);
-                    })
-                    .findFirst()
-                    .orElse(null);
-
-            SpecialEnemy specialEnemy = (SpecialEnemy)this.findObjectAlive(SpecialEnemy.class)
-                    .filter(gameObject -> {
-                        BoxCollider other = ((SpecialEnemy) gameObject).boxCollider;
-                        return ((Player)gameObjectCollied).boxCollider.checkBoxCollider(other);
-                    })
-                    .findFirst()
-                    .orElse(null);
-
-            BulletEnemy bulletEnemy = (BulletEnemy) this.findObjectAlive(BulletEnemy.class)
-                    .filter(gameObject -> {
-                        BoxCollider other = ((BulletEnemy) gameObject).boxCollider;
-                        return ((Player)gameObjectCollied).boxCollider.checkBoxCollider(other);
-                    })
-                    .findFirst()
-                    .orElse(null);
-
-            if(enemy!= null){
-                return enemy;
+        else{
+            try {
+                object = cls.newInstance();
+                this.add(object);
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
             }
-            if(bulletEnemy!= null){
-                return bulletEnemy;
-            }
-            if(specialEnemy!= null){
-                return specialEnemy;
-            }
-            else return null;
         }
-
-        else return null;
+        return object;
 
     }
 
-    
+    public void killObject(GameObject gameObject){
+        if (gameObject.position.x <0 || gameObject.position.x >1024 || gameObject.position.y <0 ||gameObject.position.y >600){
+            gameObject.isAlive = false;
+        }
+    }
 
 }

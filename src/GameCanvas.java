@@ -1,17 +1,17 @@
+import base.GameObject;
 import base.GameObjectManager;
 import game.background.Background;
+import game.BuffObjects.BuffObjectsSpawner;
 import game.enemy.EnemySpawner;
 import game.enemy.SpecialEnemy;
 import game.enemy.SpecialEnemySpawner;
 import game.player.Player;
 import game.star.StarSpawner;
 import input.KeyboardInput;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
-
 
 public class GameCanvas extends JPanel {
 
@@ -44,17 +44,13 @@ public class GameCanvas extends JPanel {
         GameObjectManager.instance.add(new StarSpawner());
         GameObjectManager.instance.add(new EnemySpawner());
         GameObjectManager.instance.add(new SpecialEnemySpawner());
+        GameObjectManager.instance.add(new BuffObjectsSpawner());
     }
-
-
-
     private  void setupPlayer(){
-        this.player = new Player();
+        this.player = GameObjectManager.instance.recycle(Player.class);
         this.player.position.set(500,300);
         this.player.playerMove.velocity.set(4,0);
-        GameObjectManager.instance.add(this.player);
     }
-
 
 
     @Override
@@ -77,9 +73,5 @@ public class GameCanvas extends JPanel {
 
 
     }
-
-
-
-
 
 }

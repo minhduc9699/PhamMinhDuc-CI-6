@@ -17,10 +17,9 @@ public class EnemyShoot {
 
         if(this.frameCounter.run()){
             for(int angle=0; angle<360; angle+=30){
-                BulletEnemy bulletEnemy = new BulletEnemy();
+                BulletEnemy bulletEnemy = GameObjectManager.instance.recycle(BulletEnemy.class);
                 bulletEnemy.velocity= new Vector2D(5,0).rotate(angle);
                 bulletEnemy.position.set(enemy.position);
-                GameObjectManager.instance.add(bulletEnemy);
             }
             this.frameCounter.reset();
         }

@@ -20,9 +20,8 @@ public class SpecialEnemySpawner  extends GameObject {
     public  void run(){
         if(this.frameCounter.run()){
             super.run();
-            SpecialEnemy enemy =  new SpecialEnemy();
+            SpecialEnemy enemy = GameObjectManager.instance.recycle(SpecialEnemy.class);
             enemy.position.set(this.random.nextInt(1024),this.random.nextInt(600));
-            GameObjectManager.instance.add(enemy);
             this.frameCounter.reset();
         }
     }
