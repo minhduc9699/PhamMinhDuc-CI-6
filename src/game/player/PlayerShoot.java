@@ -1,61 +1,40 @@
 package game.player;
 
 import base.FrameCounter;
-import base.GameObjectManager;
-import game.bullet.BulletPlayer;
 import input.KeyboardInput;
 
 public class PlayerShoot {
-    private FrameCounter frameCounter, specialFrameCounter;
+    private FrameCounter frameCounter, frameCounter1;
+    public Shoot shoot;
+    public SingleShoot singleShoot;
+    public TripleShoot tripleShoot;
+    public boolean changeShoot = false;
 
 
-    public PlayerShoot(){
-        this.frameCounter = new FrameCounter(30);
+    public PlayerShoot() {
+        this.frameCounter = new FrameCounter(20);
+        this.frameCounter1 = new FrameCounter(1500);
+        this.tripleShoot = new TripleShoot();
+        this.singleShoot = new SingleShoot();
+        this.shoot = this.singleShoot;
     }
 
-    public void run(Player player){
-
-        if (player.specialShoot ){
-            if(this.specialFrameCounter == null)
-                this.specialFrameCounter = new FrameCounter(1000);
-        }
-        else{
-            this.specialFrameCounter = null;
-        }
-
-        if(this.specialFrameCounter!=null){
-            if(this.specialFrameCounter.run()){
-                player.specialShoot=false;
+    public void run(Player player) {
+        if(changeShoot){
+            if(this.frameCounter1.run()){
+                this.shoot = this.singleShoot;
+                this.frameCounter1.reset();
             }
+
         }
 
-
-        if(this.frameCounter.run()){
-            if(KeyboardInput.instance.spacePressed){
-                BulletPlayer bulletPlayer = GameObjectManager.instance.recycle(BulletPlayer.class);
-                bulletPlayer.position.set(player.position);
-                bulletPlayer.velocity.set(player.playerMove.velocity.add(player.playerMove.velocity.normalize().multiply(6)));
-
-                if(this.specialFrameCounter!=null){
-                    for(int angle = 90; angle <360; angle +=180){
-                        BulletPlayer specialBullet = GameObjectManager.instance.recycle(BulletPlayer.class);
-                        specialBullet.position.set(player.position);
-                        specialBullet.velocity.set(player.playerMove.velocity
-                                .add(player.playerMove.velocity
-                                        .normalize()
-                                        .rotate(angle)
-                                        .multiply(6)));
-                    }
-
-                }
-
-
+        if (this.frameCounter.run()) {
+            if (KeyboardInput.instance.spacePressed) {
+                this.shoot.shoot(player);
                 this.frameCounter.reset();
-
-
             }
-
         }
+
 
     }
 }

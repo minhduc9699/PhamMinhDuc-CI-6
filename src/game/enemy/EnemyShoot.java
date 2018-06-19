@@ -24,6 +24,9 @@ public class EnemyShoot {
             this.frameCounter.reset();
         }
 
+
+
+
     }
 
 }

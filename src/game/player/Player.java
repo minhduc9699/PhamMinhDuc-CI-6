@@ -1,16 +1,19 @@
 package game.player;
 
 import base.GameObject;
+
+import base.GameObjectManager;
 import base.Vector2D;
-import game.bullet.BulletEnemy;
-import game.BuffObjects.Shield;
 import game.BuffObjects.TripleShoot;
+import game.bullet.BulletEnemy;
+import game.BuffObjects.*;
 import game.enemy.Enemy;
 import game.enemy.SpecialEnemy;
 import physic.BoxCollider;
 import physic.PhysicBody;
 import physic.RunHitObject;
 import renderer.PolygonRenderer;
+
 import java.awt.*;
 
 public class Player extends GameObject implements PhysicBody {
@@ -21,10 +24,11 @@ public class Player extends GameObject implements PhysicBody {
     private PlayerShoot playerShoot;
 
     private RunHitObject runHitObject;
+    private CreateSmoke createSmoke;
 
-    private  int life;
 
-   public boolean specialShoot;
+    public boolean hitEnemy= false;
+
 
     public Player() {
         this.renderer = new PolygonRenderer(
@@ -40,10 +44,12 @@ public class Player extends GameObject implements PhysicBody {
                 Enemy.class,
                 BulletEnemy.class,
                 SpecialEnemy.class,
-                Shield.class,
+                EffectShield.class,
                 TripleShoot.class);
-        this.life =1;
-        this.specialShoot = false;
+        this.createSmoke =new CreateSmoke();
+
+
+
     }
 
 
@@ -51,12 +57,14 @@ public class Player extends GameObject implements PhysicBody {
     public void run() {
         super.run();
         this.playerMove.run(this);
-        this.boxCollider.position.set(this.position.x,this.position.y);
+        this.boxCollider.position.set(this.position.x-10,this.position.y-8);
 
         this.playerShoot.run(this);
 
         ((PolygonRenderer)(this.renderer)).angle = this.playerMove.angle;
         this.runHitObject.run(this);
+        this.createSmoke.run(this);
+
     }
 
 
@@ -67,30 +75,22 @@ public class Player extends GameObject implements PhysicBody {
 
     @Override
     public void getHit(GameObject gameObject) {
-        if(gameObject instanceof Enemy || gameObject instanceof BulletEnemy || gameObject instanceof SpecialEnemy ){
-            if(this.life==1){
-                this.isAlive = false;
-            }
-            else{
-                this.life -=1;
+        if(gameObject instanceof Enemy || gameObject instanceof BulletEnemy || gameObject instanceof SpecialEnemy ) {
+            this.isAlive = false;
+            if (gameObject instanceof Enemy || gameObject instanceof SpecialEnemy) {
+                this.hitEnemy = true;
             }
         }
-        if(gameObject instanceof Shield){
-            this.life = 4;
+
+        if(gameObject instanceof EffectShield){
+            GameObjectManager.instance.recycle(Shield.class);
+
         }
         if(gameObject instanceof TripleShoot){
-            this.specialShoot = true;
+            this.playerShoot.shoot = this.playerShoot.tripleShoot;
+            this.playerShoot.changeShoot = true;
         }
     }
 
-    @Override
-    public void render(Graphics graphics){
-        super.render(graphics);
-        if(this.life >1){
-            graphics.setColor(Color.GREEN);
-            graphics.drawOval((int)this.position.x-25, (int)this.position.y-25, 50,50);
-        }
-
-
-    }
 }
+

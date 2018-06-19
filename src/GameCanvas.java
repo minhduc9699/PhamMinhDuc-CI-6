@@ -1,17 +1,18 @@
-import base.GameObject;
 import base.GameObjectManager;
+import game.Particle;
 import game.background.Background;
-import game.BuffObjects.BuffObjectsSpawner;
+import game.BuffObjects.BuffObjectSpawner;
 import game.enemy.EnemySpawner;
-import game.enemy.SpecialEnemy;
 import game.enemy.SpecialEnemySpawner;
 import game.player.Player;
 import game.star.StarSpawner;
 import input.KeyboardInput;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+
 
 public class GameCanvas extends JPanel {
 
@@ -20,6 +21,7 @@ public class GameCanvas extends JPanel {
     Graphics graphics;
 
     Player player;
+    Particle particle = new Particle();
 
     private Random random = new Random();
 
@@ -44,13 +46,19 @@ public class GameCanvas extends JPanel {
         GameObjectManager.instance.add(new StarSpawner());
         GameObjectManager.instance.add(new EnemySpawner());
         GameObjectManager.instance.add(new SpecialEnemySpawner());
-        GameObjectManager.instance.add(new BuffObjectsSpawner());
+//
+        GameObjectManager.instance.add(new BuffObjectSpawner());
     }
+
+
+
     private  void setupPlayer(){
         this.player = GameObjectManager.instance.recycle(Player.class);
         this.player.position.set(500,300);
         this.player.playerMove.velocity.set(4,0);
+
     }
+
 
 
     @Override
@@ -69,9 +77,13 @@ public class GameCanvas extends JPanel {
 
     public void runAll(){
         GameObjectManager.instance.runAll();
+        this.particle.run(this.player);
         KeyboardInput.instance.reset();
 
-
     }
+
+
+
+
 
 }

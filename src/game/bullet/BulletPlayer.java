@@ -9,7 +9,7 @@ import game.enemy.SpecialEnemy;
 import game.player.Player;
 import physic.BoxCollider;
 import physic.PhysicBody;
-//import physic.RunHitObject;
+import physic.RunHitObject;
 import renderer.ImageRenderer;
 
 import java.awt.*;
@@ -18,15 +18,15 @@ public class BulletPlayer extends GameObject implements PhysicBody {
 
     public Vector2D velocity;
     public BoxCollider boxCollider;
-//    private RunHitObject runHitObject;
+    private RunHitObject runHitObject;
 
 
 
     public BulletPlayer() {
         this.velocity = new Vector2D();
-        this.renderer = new ImageRenderer("resources/images/circle.png", 4, 4);
+        this.renderer = new ImageRenderer("resources/images/circle.png", 4, 4,Color.GREEN);
         this.boxCollider = new BoxCollider(6, 6);
-//        this.runHitObject = new RunHitObject(Enemy.class, BulletEnemy.class,SpecialEnemy.class);
+        this.runHitObject = new RunHitObject(Enemy.class, BulletEnemy.class,SpecialEnemy.class);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class BulletPlayer extends GameObject implements PhysicBody {
         super.run();
         this.position.addUp(this.velocity);
         this.boxCollider.position.set(this.position.x - 3, this.position.y - 3);
-//        this.runHitObject.run(this);
+        this.runHitObject.run(this);
         GameObjectManager.instance.killObject(this);
 
 

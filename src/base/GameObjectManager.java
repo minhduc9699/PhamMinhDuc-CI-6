@@ -1,5 +1,6 @@
 package base;
 
+
 import game.player.Player;
 import physic.BoxCollider;
 import physic.PhysicBody;
@@ -83,6 +84,13 @@ public class GameObjectManager {
         }
         return object;
 
+    }
+
+    public  <T extends GameObject> long countObjectAlive(Class<T> cls){
+        return this.list.stream()
+                .filter(gameObject -> gameObject.isAlive)
+                .filter(gameObject -> cls.isInstance(gameObject))
+                .count();
     }
 
     public void killObject(GameObject gameObject){
